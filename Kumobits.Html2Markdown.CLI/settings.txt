@@ -1,0 +1,7 @@
+﻿OPENAI_API_KEY= // Get your API key from https://platform.openai.com/account/api-keys
+ANTHROPIC_API_KEY= // Get your API key from https://console.anthropic.com/settings/keys
+HTML2MARKDOWN_STRATEGY=Html2Markdown // ReverseMarkdown | Html2Markdown
+CHAT_PROVIDER=anthropic // anthropic | openai
+PROMPT_STEPS=clean_markdown.md,extract_wisdom.md
+AI_MAX_TOKENS=60000
+AI_TEMPERATURE=0.2
