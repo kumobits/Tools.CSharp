@@ -30,7 +30,7 @@ public class Application
         foreach (var url in urls)
         {
             i++;
-
+            _logger.LogInformation($"Starting: {url}");
             var html = _webFetcher.FetchHtmlFromUrl(url);
             if (string.IsNullOrEmpty(html))
                 continue;
@@ -40,10 +40,12 @@ public class Application
             // Process the steps. Each step sends two things into the AiAssistant: the output from the previous step, and the prompt of the current step
             foreach (var promptStepFile in promptSteps)
             {
+                _logger.LogInformation($"Executing step: {promptStepFile}");
                 var promptStepContent = ReadPromptStepContent(promptStepFile);
                 lastOutput = await _chatProvider.Answer(promptStepContent, lastOutput);
             }
             // Save last markdown output
+            _logger.LogInformation($"Finished: {url}");
             SaveResult(i, filePrefix, url, lastOutput);
         }
     }
@@ -51,7 +53,6 @@ public class Application
     private void SaveResult(int i, string filePrefix, string url, string lastOutput)
     {
         var fileName = $"{filePrefix}_{i}";
-
         File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "Output", $"{url}.md"), lastOutput);
     }
 

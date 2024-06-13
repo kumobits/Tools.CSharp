@@ -15,8 +15,6 @@ public class WebClient
 
     public string? FetchHtmlFromUrl(string url)
     {
-        _logger.LogInformation($"Fetching HTML from {url}");
-
         try
         {
             var response = _httpClient.GetAsync(url).Result;

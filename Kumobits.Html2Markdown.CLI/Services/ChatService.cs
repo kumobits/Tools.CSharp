@@ -26,7 +26,7 @@ public class AnthropicChatService : IChatService
     {
 
         var fullMessage = promptTemplate.Replace("{{INPUT}}", input);
-        var client = new AnthropicClient();
+        var client = new AnthropicClient(new APIAuthentication(appConfig.ANTHROPIC_API_KEY));
         var messages = new List<Message>()
         {
             new(RoleType.User, appConfig.CHAT_SYSTEM_INSTRUCTION),
@@ -41,10 +41,21 @@ public class AnthropicChatService : IChatService
             Model = AnthropicModels.Claude3Sonnet,
             Stream = false,
             Temperature = 1.0m,
-        };
-        var firstResult = await client.Messages.GetClaudeMessageAsync(parameters);
 
-        return firstResult.Message.ToString();
+        };
+
+        try
+        {
+            var firstResult = await client.Messages.GetClaudeMessageAsync(parameters);
+            return firstResult.Message.ToString();
+
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, $"Error fetching message from Anthropic, Message: {ex.Message}");
+            throw;
+        }
+
 
         ////print result
         //Console.WriteLine(firstResult.Message.ToString());
